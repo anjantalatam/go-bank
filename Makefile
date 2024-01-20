@@ -4,6 +4,12 @@ export
 postgres:
 	docker run --name postgres16 -e POSTGRES_USER=$(POSTGRES_USER) -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -p 5432:5432 -d postgres:16-alpine
 
+postgres-start:
+	docker start postgres16
+
+postgres-stop:
+	docker stop postgres16
+
 createdb:
 	docker exec -it postgres16 createdb --username=$(POSTGRES_USER) --owner=$(POSTGRES_USER) simple_bank
 
@@ -18,5 +24,8 @@ migratedown:
 
 sqlc:
 	sqlc generate
+
+test:
+	go test -v -cover ./...
 
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc-generate
