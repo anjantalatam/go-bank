@@ -36,3 +36,7 @@ func RandomCurrency() string {
 	c := []string{"INR", "USD", "CAD"}
 	return c[rand.Intn(len(c))]
 }
+
+func RandomEntryAmount() int64 {
+	return RandomInt(-1000, 1000)
+}
