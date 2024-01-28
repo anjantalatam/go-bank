@@ -5,22 +5,23 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Store struct {
 	*Queries
-	db *pgx.Conn
+	connPool *pgxpool.Pool
 }
 
-func NewStore(db *pgx.Conn) *Store {
+func NewStore(connPool *pgxpool.Pool) *Store {
 	return &Store{
-		db:      db,
-		Queries: New(db),
+		connPool: connPool,
+		Queries:  New(connPool),
 	}
 }
 
 func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
-	tx, err := store.db.BeginTx(ctx, pgx.TxOptions{})
+	tx, err := store.connPool.BeginTx(ctx, pgx.TxOptions{})
 
 	if err != nil {
 		return err
