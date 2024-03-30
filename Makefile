@@ -4,6 +4,9 @@ export
 postgres:
 	docker run --name postgres16 -e POSTGRES_USER=$(POSTGRES_USER) -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} -p 5432:5432 -d postgres:16-alpine
 
+# run psql
+# docker exec -it postgres16 psql -U ${POSTGRES_USER} simple_bank
+
 postgres-start:
 	docker start postgres16
 
