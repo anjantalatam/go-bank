@@ -1,5 +1,46 @@
 <details>
 <summary>
+Notes #8
+</summary>
+
+```sql
+-- Tx1: Transfer $10 from account 1 to 2
+BEGIN;
+
+UPDATE accounts SET balance = balance - 10 where id = 1 RETURNING *;
+UPDATE accounts SET balance = balance + 10 where id = 2 RETURNING *;
+
+ROLLBACK;
+
+-- Tx2: Transer $10 from account 2 to 1
+BEGIN;
+
+UPDATE accounts SET balance = balance - 10 where id = 2 RETURNING *;
+UPDATE accounts SET balance = balance + 10 where id = 1 RETURNING *;
+
+ROLLBACK;
+```
+
+Use SQL to debug from Notes #7 to see how txn2's exclusive lock blocks txn1 2nd update command
+and continuing to run tx2's second command would end up in a dead lock
+
+Solution:
+change txn2 to update id = 1 first
+
+```sql
+UPDATE accounts SET balance = balance + 10 where id = 1 RETURNING *;
+UPDATE accounts SET balance = balance - 10 where id = 2 RETURNING *;
+```
+
+This way when tx1 is initiated it holds a exclusive lock for id 1 and tx2 is put on hold from the first command itself.
+This way tx1 can complete with its second command without a hold by tx2 and thus dead lock is resolved
+
+To summarize: When we follow an order in updating the accounts we can avoid a deadlock, here in our case account with smaller id is updated in any txn
+
+</details>
+
+<details>
+<summary>
 Notes #7
 </summary>
 
