@@ -30,9 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run migrations
-        run: make migrateup
-
       - name: Set up Go 1.20
         uses: actions/setup-go@v4
         with:
@@ -44,6 +41,9 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+
+      - name: Run migrations
+        run: make migrateup
 
       - name: Test
         run: make test
