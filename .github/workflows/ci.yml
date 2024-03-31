@@ -38,9 +38,9 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
-          echo "POSTGRES_USER=${{ env.POSTGRES_USER }}" >> .env
-          echo "POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}" >> .env
+          echo "DATABASE_URL=${{ vars.DATABASE_URL }}" >> .env
+          echo "POSTGRES_USER=${{ vars.POSTGRES_USER }}" >> .env
+          echo "POSTGRES_PASSWORD=${{ vars.POSTGRES_PASSWORD }}" >> .env
 
       - name: Run migrations
         run: make migrateup
